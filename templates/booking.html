@@ -1,0 +1,162 @@
+<html>
+<head>
+	</head>
+<!-- Compiled and minified CSS -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/materialize/0.100.2/css/materialize.min.css">
+  <link rel="stylesheet" href="{{ url_for('static', filename='custom.css') }}">
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.2.1/jquery.js"></script>
+  <!-- Compiled and minified JavaScript -->
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/materialize/0.100.2/js/materialize.min.js"></script>
+ 
+ <body style="background-image:url({{url_for('static', filename='images/m.jpg')}})">
+
+ <nav>
+    <div class="nav-wrapper" style="background-color:black;">
+       <ul id="nav-mobile" class="left hide-on-med-down">
+        <a href="#" class="brand-logo" style="padding-left:5px;font-size:15px; font-weight:bold; color:white;"><img src="{{url_for('static', filename='images/logo.gif')}}" style="width:53px; height:53px"> IIITA ORBS</a>
+      </ul>
+      <ul id="nav-mobile" class="right hide-on-med-and-down">
+      {% if current_user.is_authenticated %}
+        <li><a href="/">Home</a></li>
+        <li><a href="/booking/">Booking</a></li>
+        <li><a href="/cancellation/">Cancellation</a></li>
+        <li><a href="/reservation/">Reservation</a></li>
+        <li>
+        <ul class="nav navbar-nav navbar-right">
+          {% if current_user.is_authenticated %}
+          <li><a class='dropdown-button' href='#' data-activates='dropdown1'><img src="{{current_user.avatar}}?sz=70" width="50" height="50" style="border-radius: 50%; margin-top:5px" alt="{{current_user.name}}"/></a></li> 
+          {% endif %}
+          <ul id='dropdown1' class='dropdown-content' style="margin-top:60px; margin-right:10px">
+            <li><a href="{{url_for('logout')}}" style="color:black">Logout</a></li>
+          </ul>
+        </ul>
+      </li>
+       {% else %}
+    <li><a href="{{url_for('login')}}" >Login</a></li>
+    {% endif %}
+      </ul>
+    </div>
+  </nav>
+
+
+<div class="container" style="background-color:white; opacity:0.9; padding:  30 60 80 80; margin-top:20px; width:60%; height:80%; border:solid; border-width:1px">
+
+<div class="row">
+    <h3> Booking Details </h3>
+    <form class="col s12" method ="POST" id="booking-form" style="color:black" action="/booking/">
+
+      <div class="row">
+        <div class="input-field col s8">
+          <input id="first_name" type="text" class="validate" name ="first_name">
+          <label for="first_name">Name</label>
+        </div>
+          
+
+          <div class="input-field col s4">
+          <input id="age" type="number" class="validate" name ="age" min=5>
+          <label for="last_name">Age</label>
+          </div>
+
+      </div>
+
+      <div class="row">
+        <div class="input-field col s6">
+          <input id="arrival" type="date" class="datepicker" name ="arrival">
+          <label for="arrival">Arrival Date</label>
+        </div>
+      
+        <div class="input-field col s6">
+          <input id="departure" type="date" class="datepicker" name ="departure">
+          <label for="departure">Departure Date</label>
+        </div>
+
+        
+
+      </div>
+
+      <div class="row">
+          <div class="input-field col s6">
+            <input id="email" type="email" class="validate" name ="email">
+            <label for="email">Email</label>
+          </div>
+
+        <div class="input-field col s6">
+          <input id="mobile" type="text" pattern="[0-9]{10}"class="validate" name ="mobile">
+          <label for="mobile">Mobile</label>
+        </div>
+      </div>
+
+          <div class="row">
+            <div class="input-field col s5">
+              <select name="rooms">
+                <option value="" disabled selected>Number of Rooms</option>
+                <option value="1">1</option>
+                <option value="2">2</option>
+                <option value="3">3</option>
+              </select>
+            </div>
+
+          
+
+            <div class="input-field col s3">
+            <select name="room_type">
+              <option value="" disabled selected>Type of Room</option>
+              <option value="AC">AC</option>
+              <option value="NONAC">Non AC</option>
+            </select>
+            </div>
+
+            <div class="input-field col s4">
+            <button class="btn waves-effect waves-light" style="margin-left: 15px" type="submit" name="action">Submit
+            </button>
+            </div>
+          </div>
+    </form>
+  </div>
+  </div>
+        
+  
+
+	 <script type="text/javascript">
+   $('.datepicker[name=arrival]').pickadate({
+	    selectMonths: true, // Creates a dropdown to control month
+	    selectYears: 15, // Creates a dropdown of 15 years to control year
+      min: new Date()
+	  });
+   $('.datepicker[name=departure]').pickadate({
+      selectMonths: true, // Creates a dropdown to control month
+      selectYears: 15, // Creates a dropdown of 15 years to control year
+      min: new Date() + 1
+    });
+   $('.dropdown-button').dropdown({
+      inDuration: 300,
+      outDuration: 225,
+      constrainWidth: true, // Does not change width of dropdown to that of the activator
+      click: true, // Activate on hover
+      gutter: 0, // Spacing from edge
+      belowOrigin: false, // Displays dropdown below the button
+      alignment: 'right', // Displays dropdown with edge aligned to the left of button
+      stopPropagation: false // Stops event propagation
+    }
+  );
+   $('button[type=submit]').click(function(e) {
+      e.preventDefault();
+      var arrival = new Date($('.datepicker[name=arrival]').val());
+      var departure = new Date($('.datepicker[name=departure]').val());
+      if (departure <= arrival) {
+        alert("Departure date should be greater than arrival date");
+      } else {
+        $('#booking-form').submit();
+      }
+
+   })
+
+	  </script>
+    <script type="text/javascript">$(document).ready(function() {
+    $('select').material_select();
+  });</script>
+
+ </body>
+
+
+</html>

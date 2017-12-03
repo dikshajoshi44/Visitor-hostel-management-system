@@ -1,0 +1,66 @@
+<html>
+<head>
+	</head>
+<!-- Compiled and minified CSS -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/materialize/0.100.2/css/materialize.min.css">
+  <link rel="stylesheet" href="{{ url_for('static', filename='custom.css') }}">
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.2.1/jquery.js"></script>
+  <!-- Compiled and minified JavaScript -->
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/materialize/0.100.2/js/materialize.min.js"></script>
+ 
+<body style="background-image:url({{url_for('static', filename='images/m.jpg')}})">
+
+  <nav>
+    <div class="nav-wrapper" style="background-color:black; ">
+      <ul id="nav-mobile" class="left hide-on-med-down">
+        <a href="#" class="brand-logo" style="padding-left:5px;font-size:15px; font-weight:bold; color:white;"><img src="{{url_for('static', filename='images/logo.gif')}}" style="width:53px; height:53px"> IIITA ORBS</a>
+      </ul>
+      <ul id="nav-mobile" class="right hide-on-med-and-down">
+      {% if current_user.is_authenticated %}
+        <li><a href="/">Home</a></li>
+        <li><a href="/booking/">Booking</a></li>
+        <li><a href="/cancellation/">Cancellation</a></li>
+        <li><a href="/reservation/">Reservation</a></li>
+        <li>
+        <ul class="nav navbar-nav navbar-right">
+          {% if current_user.is_authenticated %}
+          <li><a class='dropdown-button' href='#' data-activates='dropdown1'><img src="{{current_user.avatar}}?sz=70" width="50" height="50" style="border-radius: 50%; margin-top:5px" alt="{{current_user.name}}"/></a></li> 
+          {% endif %}
+          <ul id='dropdown1' class='dropdown-content' style="margin-top:60px; margin-right:10px">
+            <li><a href="{{url_for('logout')}}" style="color:black">Logout</a></li>
+          </ul>
+        </ul>
+	    </li>
+       {% else %}
+		<li><a href="{{url_for('login')}}" >Login</a></li>
+		{% endif %}
+      </ul>
+    </div>
+  </nav>
+  <div class="container">
+    <div class="row">
+        <div class="col s12 m6">
+          <div class="card blue-grey darken-1">
+            <div class="card-content white-text">
+              <span class="card-title">Booking Failed!!</span>
+              <p>Sorry but seems there is no available room according to your requirements. Please try with a different date.</p>
+            </div>
+          </div>
+        </div>
+      </div>
+  </div>
+  <script type="text/javascript">
+$('.dropdown-button').dropdown({
+      inDuration: 300,
+      outDuration: 225,
+      constrainWidth: true, // Does not change width of dropdown to that of the activator
+      click: true, // Activate on hover
+      gutter: 0, // Spacing from edge
+      belowOrigin: false, // Displays dropdown below the button
+      alignment: 'right', // Displays dropdown with edge aligned to the left of button
+      stopPropagation: false // Stops event propagation
+    }
+  );
+</script>
+</body>
+</html>

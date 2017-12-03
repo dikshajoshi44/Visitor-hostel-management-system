@@ -1,0 +1,159 @@
+<html>
+	<head></head>
+
+
+<body style="background-image:url({{url_for('static', filename='images/m.jpg')}})">
+<!-- Compiled and minified CSS -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/materialize/0.100.2/css/materialize.min.css">
+  <link rel="stylesheet" href="{{ url_for('static', filename='custom.css') }}">
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.2.1/jquery.js"></script>
+  <!-- Compiled and minified JavaScript -->
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/materialize/0.100.2/js/materialize.min.js"></script>	
+
+
+<nav>
+    <div class="nav-wrapper" style="background-color:black; ">
+      <ul id="nav-mobile" class="left hide-on-med-down">
+        <a href="#" class="brand-logo" style="padding-left:5px;font-size:15px; font-weight:bold; color:white;"><img src="{{url_for('static', filename='images/logo.gif')}}" style="width:53px; height:53px"> IIITA ORBS</a>
+      </ul>
+      <ul id="nav-mobile" class="right hide-on-med-and-down">
+      {% if current_user.is_authenticated %}
+        <li><a href="/">Home</a></li>
+        <li><a href="/booking/">Booking</a></li>
+        <li><a href="/cancellation/">Cancellation</a></li>
+        <li><a href="/reservation/">Reservation</a></li>
+        <li>
+        <ul class="nav navbar-nav navbar-right">
+          {% if current_user.is_authenticated %}
+          <li><a class='dropdown-button' href='#' data-activates='dropdown1'><img src="{{current_user.avatar}}?sz=70" width="50" height="50" style="border-radius: 50%; margin-top:5px" alt="{{current_user.name}}"/></a></li> 
+          {% endif %}
+          <ul id='dropdown1' class='dropdown-content' style="margin-top:60px; margin-right:10px">
+            <li><a href="{{url_for('logout')}}" style="color:black">Logout</a></li>
+          </ul>
+        </ul>
+      </li>
+       {% else %}
+    <li><a href="{{url_for('login')}}" >Login</a></li>
+    {% endif %}
+      </ul>
+    </div>
+  </nav>
+
+  <div class="container" style="background-color:white; opacity:0.9; padding:  30 60 80 80; margin-top:20px; border:solid; border-width:1px">
+  <table class="responsive-table centered highlight">
+        <thead>
+          <tr>
+              <th>Name</th>
+              <th>Check_in</th>
+              <th>Check_out</th>
+              <th>Status</th>
+              <th>Details</th>
+          </tr>
+        </thead>
+
+        <tbody>
+        {% for element in data %}
+          <tr>
+            <td>{{element.booking.name}}</td>
+            <td>{{element.reservation.check_in}}</td>
+            <td>{{element.reservation.check_out}}</td>
+            <td>{% if element.reservation.is_cancelled == 1 %}Cancelled{% else %}Booked{% endif %}</td>
+            <td><a class="waves-effect waves-light btn modal-trigger" href="#modal{{loop.index}}">Receipt</a></td>
+
+          </tr>
+          {% endfor %}
+      
+        </tbody>
+      </table>
+      </div>
+{% for element in data %}
+<div id="modal{{loop.index}}" class="modal">
+    <div class="modal-content">
+
+
+      <h4>Receipt</h4>
+
+      <table>
+        <thead>
+          <tr>
+              <th>Reservation Id</th>
+              <th>Name</th>
+              <th>Invoice Id</th>
+              <th>Check In</th>
+              <th>Check Out</th>
+              <th>Room Nos</th>
+              <th>Amount</th>
+          </tr>
+        </thead>
+
+        <tbody>
+          
+          <tr>
+            
+            <td>{{element.reservation.reservation_id}}</td>
+            <td>{{element.booking.name}}</td>
+            <td class="invoice-id">{{element.booking.invoice_id}}</td>
+            <td>{{element.reservation.check_in}}</td>
+            <td>{{element.reservation.check_out}}</td>
+            <td>{% for room in element.rooms %}
+              {{room.room_id}},
+              {% endfor %}
+            </td>
+            <td>{{element.booking.amount}}</td>
+            
+
+          </tr>
+          
+      
+        </tbody>
+      </table>
+
+
+
+    </div>
+
+    <div class="modal-footer">
+    {% if is_admin == 1 %}
+      <a class="modal-action waves-effect waves-red btn-flat cancel-btn">Cancel</a>
+    {% endif %}
+      <a href="#!" class="modal-action waves-effect waves-green btn-flat">Download</a>
+    </div>
+
+  </div>
+  {% endfor %}
+
+  <script type="text/javascript">$(document).ready(function(){
+    // the "href" attribute of the modal trigger must specify the modal ID that wants to be triggered
+    $('.modal').modal();
+    $('.dropdown-button').dropdown({
+      inDuration: 300,
+      outDuration: 225,
+      constrainWidth: true, // Does not change width of dropdown to that of the activator
+      click: true, // Activate on hover
+      gutter: 0, // Spacing from edge
+      belowOrigin: false, // Displays dropdown below the button
+      alignment: 'right', // Displays dropdown with edge aligned to the left of button
+      stopPropagation: false // Stops event propagation
+      }
+    );
+
+    $('.cancel-btn').click(function() {
+      var invoice_id = $(this).parent().parent().find('.invoice-id').text();
+      $.ajax({
+        url: '/cancellation/',
+        method: 'POST',
+        data: {invoice_id: parseInt(invoice_id)},
+        success: function(response){
+          alert(invoice_id+" has been cancelled");
+          window.location = '/admin/reservations/';
+        }
+      });
+    })
+  });
+  </script>
+
+</body>
+
+
+
+</html>

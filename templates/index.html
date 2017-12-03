@@ -1,0 +1,92 @@
+<html>
+<head>
+	</head>
+<!-- Compiled and minified CSS -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/materialize/0.100.2/css/materialize.min.css">
+  <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='custom.css') }}">
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.2.1/jquery.js"></script>
+  <!-- Compiled and minified JavaScript -->
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/materialize/0.100.2/js/materialize.min.js"></script>
+ 
+<body>
+
+  
+    {% if current_user.is_authenticated %}
+  <nav>
+    <div class="nav-wrapper" style="background:black; opacity:0.8">
+      <ul id="nav-mobile" class="left hide-on-med-down">
+      	<a href="#" class="brand-logo" style="padding-left:5px;font-size:15px; font-weight:bold; color:white;"><img src="{{url_for('static', filename='images/logo.gif')}}" style="width:53px; height:53px"> IIITA ORBS</a>
+      </ul>
+      <ul id="nav-mobile" class="right hide-on-med-and-down">
+      {% if current_user.is_authenticated %}
+        <li><a href="/booking/">Booking</a></li>
+        <li><a href="/cancellation/">Cancellation</a></li>
+        <li><a href="/reservation/">Reservation</a></li>
+        <li>
+        <ul class="nav navbar-nav navbar-right">
+          {% if current_user.is_authenticated %}
+          <li><a class='dropdown-button' href='#' data-activates='dropdown1'><img src="{{current_user.avatar}}?sz=70" width="50" height="50" style="border-radius: 50%; margin-top:5px" alt="{{current_user.name}}"/></a></li> 
+          {% endif %}
+          <ul id='dropdown1' class='dropdown-content' style="margin-top:60px; margin-right:10px">
+            <li><a href="{{url_for('logout')}}" style="color:black">Logout</a></li>
+          </ul>
+	      </ul>
+	      </li>
+      {% else %}
+		    <li><a href="{{url_for('login')}}" >Login</a></li>
+		{% endif %}
+
+      </ul>
+    </div>
+    
+  </nav>
+  <div style="background:white">
+  <div class="container-fluid" style="background:white">
+    <img src="{{url_for('static', filename='images/campus1.jpg')}}" style="margin-top:-90px; width:100%; height:115%">
+    <p><h2 class="center" style="font-weight:bold"> Accomodation</h2>
+    <div class="row" style="margin-top:10%;" >
+      <img src="{{url_for('static', filename='images/hostel.jpg')}}" class="left" style="margin-left:40px; width:384px; height:288px">
+      <div id="heading">
+        <h3 class="center">Suite</h3>
+      </div>
+      <p style="margin-left:35%;">IIIT Allahabad offers you facility of Suite, AC Room with food facility and 24 hours running water and electricity.You can make your booking using this web application and enjoy your stay with lavish lifestyle. </p>
+    </div>
+    <div class="row" style="margin-top:7%;">
+      <img src="{{url_for('static', filename='images/vh2.jpg')}}" class="right" style="margin-left:40px; width:384px; height:288px">
+      <div id="heading">
+        <h3 class="center">Air-Conditioned</h3>
+      </div>
+      <p style="margin-left:40px;">IIIT Allahabad offers you facility of AC Rooms with 24 hours running water and electricity. Food will be chargable. You can make your booking conveniently using this app and enjoy your stay . </p>     
+    </div>
+    <div class="row" style="margin-top:7%;">
+      <img src="{{url_for('static', filename='images/vh3.jpg')}}" class="left" style="margin-left:40px; width:384px; height:288px">
+      <div id="heading">
+        <h3 class="center">Non Air-Conditioned</h3>
+      </div>
+      <p style="margin-left:35%;">IIIT Allahabad also offers you Non-AC rooms with 24 hours running water and electricity. Food will be chargable. You can make your booking conveniently using this app and enjoy your stay. </p> 
+    </div>
+    <p style="color:white;">the end of the accomodation line </p> 
+    </div>
+  </div>
+  {% else %}
+  <div class="col s12 m2 box">
+    <p class="z-depth-5"><img src="{{url_for('static', filename='images/logo.gif')}}" style="width:106; height:106"> <span style="font-size:38px; color:white; text-align:center; font-family: GillSans, Calibri, Trebuchet, sans-serif;"> IIITA Online Room Booking System </span>
+    <p><a href="{{url_for('login')}}" class="waves-effect waves-light btn" style="font-size: 23px; margin-left:43%; margin-top:3%;">Login</a></p></p>
+  </div>
+  {% endif %}
+
+<script type="text/javascript">
+$('.dropdown-button').dropdown({
+      inDuration: 300,
+      outDuration: 225,
+      constrainWidth: true, // Does not change width of dropdown to that of the activator
+      click: true, // Activate on hover
+      gutter: 0, // Spacing from edge
+      belowOrigin: false, // Displays dropdown below the button
+      alignment: 'right', // Displays dropdown with edge aligned to the left of button
+      stopPropagation: false // Stops event propagation
+    }
+  );
+</script>
+</body>
+</html>

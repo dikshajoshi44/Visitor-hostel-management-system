@@ -1,0 +1,48 @@
+<html>
+<head>	
+</head>
+
+<!-- Compiled and minified CSS -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/materialize/0.100.2/css/materialize.min.css">
+  <link rel="stylesheet" href="{{ url_for('static', filename='custom.css') }}">
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.2.1/jquery.js"></script>
+  <!-- Compiled and minified JavaScript -->
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/materialize/0.100.2/js/materialize.min.js"></script>
+
+
+<body> 
+
+ <nav>
+    <div class="nav-wrapper" style="background-color:black;">
+      <ul id="nav-mobile" class="left hide-on-med-down">
+      {% if current_user.is_authenticated %}
+        <li><a href="#">Welcome {{current_user.name}} <img src="{{current_user.avatar}}?sz=70" width="50" height="50" style="border-radius: 50%;" alt="{{current_user.name}}"/></a></li> 
+      {% endif %}
+      </ul>
+      <a href="#" class="brand-logo" style="padding-left:5px;font-size:15px; font-weight:bold; color:white;"><img src="{{url_for('static', filename='images/logo.gif')}}" style="width:53px; height:53px"> IIITA ORBS</a>
+      <ul id="nav-mobile" class="right hide-on-med-and-down">
+      {% if current_user.is_authenticated %}
+        <li><a href="/booking/">Booking</a></li>
+        <li><a href="/cancellation/">Cancellation</a></li>
+        <li><a href="/reservation/">Reservation</a></li>
+        <li>
+        <ul class="nav navbar-nav navbar-right">
+        <li><a href="{{url_for('logout')}}">Logout</a></li>
+      </ul>
+      </li>
+       {% else %}
+    <li><a href="{{url_for('login')}}" class="waves-effect waves-light btn" style="float:right; margin-top:10px; font-size: 15px; margin; background-color:white; border: 2px; border-style: solid; border-radius: 15px; border-color: white; opacity:0.7; color:black">Login</a></li>
+    {% endif %}
+      </ul>
+    </div>
+  </nav>
+
+<div class="container">
+  <div class="row" style="display: flex;align-items: center;justify-content: center;">
+      <a href="{{auth_url}}" style="padding: 15px 0; width: 40%;"><img src="{{url_for('static', filename='images/login-google.png')}}" style="width: 100%; margin-top:20%;"></a>
+    </div>
+  </div>
+
+
+</body>
+</html>
